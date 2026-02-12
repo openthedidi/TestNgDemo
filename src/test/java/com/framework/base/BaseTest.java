@@ -24,8 +24,8 @@ public abstract class BaseTest {
     public void setUp(@Optional BrowserType browser, @Optional("false") boolean headless) {
         LogUtils.info("Setting up WebDriver for thread: " + Thread.currentThread().getId());
 
-        BrowserType browserType = browser != null ? browser : EnvironmentConfig.getBrowserType();
-        boolean headlessFinal = headless || EnvironmentConfig.isHeadless();
+        BrowserType browserType = browser != null ? browser : getBrowserType();
+        boolean headlessFinal = headless || isHeadless();
         WebDriver driver = DriverFactory.createDriver(browserType, headlessFinal);
         DriverManager.setDriver(driver);
         LogUtils.info("WebDriver [" + browserType + "] initialized for thread: "
@@ -40,5 +40,15 @@ public abstract class BaseTest {
 
     protected WebDriver getDriver() {
         return DriverManager.getDriver();
+    }
+
+    /** 子類可覆寫，指定預設瀏覽器 */
+    protected BrowserType getBrowserType() {
+        return EnvironmentConfig.getBrowserType();
+    }
+
+    /** 子類可覆寫，指定是否 headless */
+    protected boolean isHeadless() {
+        return EnvironmentConfig.isHeadless();
     }
 }

@@ -4,19 +4,18 @@ import com.framework.base.BaseTest;
 import com.framework.enums.BrowserType;
 import com.framework.pages.eshop.LoginPage;
 import com.framework.pages.eshop.ShoppingPage;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class LoginPageTest extends BaseTest {
 
-    /**
-     * This method will run before each test in this class, overriding the default setUp behavior.
-     * It calls the parent's setUp method with specific parameters for this test class.
-     */
-    @BeforeMethod
-    public void pageTestSetUp() {
-        // Call the setUp logic from BaseTest with Chrome in headless mode
-        super.setUp(BrowserType.CHROME, true);
+    @Override
+    protected BrowserType getBrowserType() {
+        return BrowserType.CHROME;
+    }
+
+    @Override
+    protected boolean isHeadless() {
+        return true;
     }
 
 

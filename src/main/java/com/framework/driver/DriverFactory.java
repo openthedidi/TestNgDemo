@@ -3,9 +3,9 @@ package com.framework.driver;
 import com.framework.config.EnvironmentConfig;
 import com.framework.constants.TimeoutConstants;
 import com.framework.enums.BrowserType;
-import com.framework.exceptions.BrowserNotSupportedException;
 import com.framework.utils.LogUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -37,7 +37,7 @@ public final class DriverFactory {
             case EDGE -> createEdgeDriver(headless);
             case FIREFOX -> createFirefoxDriver(headless);
         };
-        configureDriver(driver);
+        configureDriver(driver, headless);
         return driver;
     }
 
@@ -72,11 +72,16 @@ public final class DriverFactory {
         return new FirefoxDriver(options);
     }
 
-    private static void configureDriver(WebDriver driver) {
+    private static void configureDriver(WebDriver driver, boolean headless) {
         driver.manage().timeouts().pageLoadTimeout(
                 Duration.ofSeconds(TimeoutConstants.PAGE_LOAD_TIMEOUT));
         driver.manage().timeouts().scriptTimeout(
                 Duration.ofSeconds(TimeoutConstants.SCRIPT_TIMEOUT));
-        driver.manage().window().maximize();
+        if (headless) {
+            //避免畫面太小導致元素互相遮蓋
+            driver.manage().window().setSize(new Dimension(1920, 1080));
+        } else {
+            driver.manage().window().maximize();
+        }
     }
 }
