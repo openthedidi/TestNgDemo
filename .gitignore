@@ -42,6 +42,7 @@ logs/
 test-output/
 screenshots/
 surefire-reports/
+reports/
 
 # OS files
 .DS_Store
