@@ -16,6 +16,13 @@
         <webdrivermanager.version>5.7.0</webdrivermanager.version>
         <testng.version>7.9.0</testng.version>
         <log4j.version>2.23.0</log4j.version>
+        <extentreports.version>5.1.2</extentreports.version>
+
+        <!-- CI/Jenkins overridable properties -->
+        <browser>chrome</browser>
+        <environment>dev</environment>
+        <headless>false</headless>
+        <suite.xml>testng-framework.xml</suite.xml>
     </properties>
 
     <dependencies>
@@ -38,7 +45,13 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
-            <scope>test</scope>
+        </dependency>
+
+        <!-- ExtentReports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
         </dependency>
 
         <!-- Log4j2 -->
@@ -78,10 +91,44 @@
                 <version>3.2.5</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                        <suiteXmlFile>${suite.xml}</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <browser>${browser}</browser>
+                        <environment>${environment}</environment>
+                        <headless>${headless}</headless>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <environment>dev</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>sit</id>
+            <properties>
+                <environment>sit</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <environment>prod</environment>
+                <headless>true</headless>
+            </properties>
+        </profile>
+        <profile>
+            <id>ci</id>
+            <properties>
+                <headless>true</headless>
+                <suite.xml>testng-smoke.xml</suite.xml>
+            </properties>
+        </profile>
+    </profiles>
 </project>
