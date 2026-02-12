@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <listeners>
+        <listener class-name="practice.config.Listeners"/>
+    </listeners>
+
+    <parameter name="baseUrl" value="www.google.com"/>
+    <parameter name="username" value="admin"/>
+    <parameter name="password" value="admin"/>
+    <test verbose="2" preserve-order="true" name="D:/TestNgDemo">
+        <groups>
+            <run>
+                <include name="parametersTest"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="practice.smoke.Login.loginPage">
+                <parameter name="username" value="Tom"/>
+            </class>
+            <class name="practice.smoke.Logout.logoutPage">
+                <parameter name="baseUrl" value="www.DEVgoogle.com"/>
+            </class>
+        </classes>
+    </test>
+</suite>
