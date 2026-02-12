@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite" parallel="tests" thread-count="2">
+    <parameter name="baseUrl" value="www.google.com"/>
+    <parameter name="username" value="admin"/>
+    <parameter name="password" value="admin"/>
+    <test verbose="2" preserve-order="true" name="practice">
+        <classes>
+            <class name="practice.smoke.Login.loginPage">
+            </class>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true" name="skbank">
+        <classes>
+            <class name="skbank.smoke.Creditcard.homePage">
+            </class>
+            <class name="skbank.smoke.Loan.houseLoanPage">
+            </class>
+        </classes>
+    </test>
+</suite>
