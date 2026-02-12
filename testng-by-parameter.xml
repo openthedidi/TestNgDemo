@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <parameter name="baseUrl" value="www.google.com"></parameter>
-    <parameter name="username" value="admin"></parameter>
-    <parameter name="password" value="admin"></parameter>
+    <parameter name="baseUrl" value="www.google.com"/>
+    <parameter name="username" value="admin"/>
+    <parameter name="password" value="admin"/>
     <test verbose="2" preserve-order="true" name="D:/TestNgDemo">
         <groups>
             <run>
@@ -12,10 +12,10 @@
         </groups>
         <classes>
             <class name="practice.smoke.Login.loginPage">
-                <parameter name="username" value="Tom"></parameter>
+                <parameter name="username" value="Tom"/>
             </class>
             <class name="practice.smoke.Logout.logoutPage">
-                <parameter name="baseUrl" value="www.DEVgoogle.com"></parameter>
+                <parameter name="baseUrl" value="www.DEVgoogle.com"/>
             </class>
         </classes>
     </test>
