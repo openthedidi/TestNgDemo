@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <!-- @BeforeTest and @AfterTest 只會依照Test 分組執行一次   -->
+    <test verbose="2" preserve-order="true" name="Creditcard">
+        <classes>
+            <class name="skbank.smoke.Creditcard.homePage">
+                <methods>
+                    <include name="cardPageFilter"/>
+                    <include name="cardPageBtn"/>
+                    <include name="cardDetail"/>
+                    <include name="cardTags"/>
+                    <!--    card開頭      -->
+<!--                 <exclude name="card.*"/>-->
+                    <include name="links"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test verbose="2" preserve-order="true" name="Loan">
+        <classes>
+            <class name="skbank.smoke.Loan.houseLoanPage">
+                <methods>
+                    <include name="testHouseLoan"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
