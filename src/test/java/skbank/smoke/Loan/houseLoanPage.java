@@ -11,7 +11,7 @@ public class houseLoanPage {
 
     @BeforeTest
     public void clearDbData(){
-        System.out.println("skbank.smoke.Loan.houseLoanPage.BeforeTest：clearDbData");
+        System.out.println("skbank.smoke.Logout.houseLoanPage.BeforeTest：clearDbData");
     }
 
 }

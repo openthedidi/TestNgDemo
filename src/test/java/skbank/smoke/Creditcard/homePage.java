@@ -8,7 +8,7 @@ public class homePage {
 
     @BeforeTest
     public void clearDbData(){
-        System.out.println("skbank.smoke.Creditcard.homePage.BeforeTest：clearDbData");
+        System.out.println("skbank.smoke.Login.homePage.BeforeTest：clearDbData");
     }
 
 
