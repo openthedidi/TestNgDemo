@@ -1,5 +1,6 @@
 package practice.smoke.Logout;
 
+import org.testng.Assert;
 import org.testng.annotations.*;
 
 
@@ -32,6 +33,15 @@ public class logoutPage {
     @AfterClass
     public void afterClass() {
         System.out.println("practice.smoke.logoutPage.afterClass");
+    }
+
+    @Parameters({"baseUrl","username","password"})
+    @Test(groups = {"parametersTest"})
+    public void parameterizedTest(String baseUrl,String username,String password){
+        System.out.println("practice.smoke.Login.loginPage.loginPageTest");
+        Assert.assertEquals(baseUrl,"www.google.com");
+        Assert.assertEquals(username,"admin");
+        Assert.assertEquals(password,"admin");
     }
 
 }
