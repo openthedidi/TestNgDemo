@@ -4,15 +4,28 @@ import com.framework.base.BaseTest;
 import com.framework.enums.BrowserType;
 import com.framework.pages.eshop.LoginPage;
 import com.framework.pages.eshop.ShoppingPage;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class LoginPageTest extends BaseTest {
+
+    /**
+     * This method will run before each test in this class, overriding the default setUp behavior.
+     * It calls the parent's setUp method with specific parameters for this test class.
+     */
+    @BeforeMethod
+    public void pageTestSetUp() {
+        // Call the setUp logic from BaseTest with Chrome in headless mode
+        super.setUp(BrowserType.CHROME, true);
+    }
+
 
     /**
      * 先測試happyPath 的login End2End
      */
     @Test(enabled = false)
     public void validateHappyPathLogin() {
+
         getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
         LoginPage loginPage = new LoginPage();
         ShoppingPage shoppingPag = loginPage.login("neux@gmail.com", "1q@W3e$R5t");

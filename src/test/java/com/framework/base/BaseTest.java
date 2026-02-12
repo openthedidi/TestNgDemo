@@ -19,14 +19,14 @@ import org.testng.annotations.Parameters;
  */
 public abstract class BaseTest {
 
-    @Parameters({"browser"})
+    @Parameters({"browser", "headless"})
     @BeforeMethod
-    public void setUp(@Optional BrowserType browser) {
+    public void setUp(@Optional BrowserType browser, @Optional("false") boolean headless) {
         LogUtils.info("Setting up WebDriver for thread: " + Thread.currentThread().getId());
 
         BrowserType browserType = browser != null ? browser : EnvironmentConfig.getBrowserType();
-        boolean headless = EnvironmentConfig.isHeadless();
-        WebDriver driver = DriverFactory.createDriver(browserType, headless);
+        boolean headlessFinal = headless || EnvironmentConfig.isHeadless();
+        WebDriver driver = DriverFactory.createDriver(browserType, headlessFinal);
         DriverManager.setDriver(driver);
         LogUtils.info("WebDriver [" + browserType + "] initialized for thread: "
                 + Thread.currentThread().getId());
