@@ -1,5 +1,6 @@
 package practice.smoke.Login;
 
+import org.testng.Assert;
 import org.testng.annotations.*;
 
 public class loginPage {
@@ -22,6 +23,7 @@ public class loginPage {
     @Test(groups = {"positive"})
     public void loginPositiveTypetest() {
         System.out.println("practice.smoke.Login.loginPage.loginPositiveTypetest");
+        assert false;
     }
 
 
@@ -30,16 +32,27 @@ public class loginPage {
         System.out.println("practice.smoke.Login.loginPage.loginNegativeTypetest");
     }
 
-    @Test(groups = {"negative"})
+    @Test(groups = {"negative"},dependsOnMethods = {"loginPositiveTypetest"})
     public void invalidAccount() {
         System.out.println("practice.smoke.Login.loginPage.invalidAccount");
 
     }
-
-
-    @Test(groups = {"negative"})
+    /**
+     * dependsOnMethods：如果依賴的method failed，就不會執行
+     */
+    @Test(groups = {"negative"},dependsOnMethods = {"loginPositiveTypetest"})
     public void invalidPassword() {
         System.out.println("practice.smoke.Login.loginPage.invalidPassword");
+
+    }
+
+    /**
+     * enable= false:測試會跳過
+     * timeOut=1000:測試執行超過 1 秒還沒結束，TestNG 會中斷它，並將其標記為失敗。
+     */
+    @Test(groups ="positive", enabled = false,timeOut = 1000)
+    public void longByGoogle(){
+        System.out.println("practice.smoke.Login.loginPage.longByGoogle");
 
     }
 
