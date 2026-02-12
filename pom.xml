@@ -19,8 +19,8 @@
         <extentreports.version>5.1.2</extentreports.version>
 
         <!-- CI/Jenkins overridable properties -->
-        <browser>chrome</browser>
-        <environment>dev</environment>
+        <browser>CHROME</browser>
+        <environment>DEV</environment>
         <headless>false</headless>
         <suite.xml>testng-framework.xml</suite.xml>
     </properties>
