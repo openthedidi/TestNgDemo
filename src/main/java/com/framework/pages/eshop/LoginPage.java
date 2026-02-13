@@ -3,7 +3,7 @@ package com.framework.pages.eshop;
 import com.framework.pages.BasePage;
 import org.openqa.selenium.By;
 
-public class LoginPage extends BasePage {
+public class LoginPage extends EshopCommonPage{
 
     private final By USER_EMAIL_INPUT = By.id("userEmail");
     private final By PASSWORD_INPUT = By.id("userPassword");

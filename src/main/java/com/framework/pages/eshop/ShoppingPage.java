@@ -1,9 +1,8 @@
 package com.framework.pages.eshop;
 
-import com.framework.pages.BasePage;
 import org.openqa.selenium.By;
 
-public class ShoppingPage extends BasePage {
+public class ShoppingPage extends EshopCommonPage {
     // Locators for elements on the Shopping Page
     private final By SHOES_ADD_CART_BUTTON = By.xpath("//b[text()='ADIDAS ORIGINAL']/ancestor::div[@class='card-body']/descendant::button[@class='btn w-10 rounded']");
 
