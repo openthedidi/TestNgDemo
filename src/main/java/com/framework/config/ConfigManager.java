@@ -1,7 +1,6 @@
 package com.framework.config;
 
 import com.framework.constants.FrameworkConstants;
-import com.framework.enums.EnvironmentType;
 import com.framework.exceptions.PropertyFileNotFoundException;
 
 import java.io.FileInputStream;
@@ -20,6 +19,9 @@ public final class ConfigManager {
     private static ConfigManager instance;
     private final Map<String, String> configMap = new HashMap<>();
 
+    /**
+     * 讀取config.properties
+     */
     private ConfigManager() {
         loadProperties(FrameworkConstants.CONFIG_PROPERTIES_PATH);
         loadEnvironmentProperties();
@@ -42,6 +44,9 @@ public final class ConfigManager {
         }
     }
 
+    /**
+     * 讀取每個環境的.properties
+     */
     private void loadEnvironmentProperties() {
         String env = getProperty(FrameworkConstants.ENVIRONMENT_KEY, FrameworkConstants.DEFAULT_ENVIRONMENT);
         String envFilePath = FrameworkConstants.CONFIG_DIR + env.toLowerCase() + ".properties";
@@ -88,7 +93,9 @@ public final class ConfigManager {
         return defaultValue;
     }
 
-    /** Reset for testing purposes */
+    /**
+     * Reset for testing purposes
+     */
     static synchronized void reset() {
         instance = null;
     }
