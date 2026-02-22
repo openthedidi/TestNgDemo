@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Framework Suite" parallel="tests" thread-count="2">
+
+    <listeners>
+        <listener class-name="com.framework.listeners.ExtentReportListener"/>
+        <listener class-name="com.framework.listeners.TestListener"/>
+        <listener class-name="com.framework.listeners.RetryTransformer"/>
+    </listeners>
+
+    <test name="Practice Tests">
+        <packages>
+            <package name="practice.*"/>
+        </packages>
+    </test>
+
+    <test name="SKBank Tests">
+        <packages>
+            <package name="skbank.*"/>
+        </packages>
+    </test>
+
+</suite>
