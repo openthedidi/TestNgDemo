@@ -4,9 +4,7 @@ import com.framework.constants.TimeoutConstants;
 import com.framework.driver.DriverManager;
 import com.framework.enums.WaitStrategy;
 import com.framework.utils.LogUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -41,7 +39,19 @@ public abstract class BasePage {
     protected void click(By locator, WaitStrategy waitStrategy) {
         WebElement element = waitForElement(locator, waitStrategy);
         LogUtils.step("Click on element: " + locator);
-        element.click();
+        try {
+            element.click();
+        }catch (ElementNotInteractableException e){
+            clickByJs(locator, waitStrategy);
+        }
+
+    }
+
+    protected void clickByJs(By locator, WaitStrategy waitStrategy){
+        WebElement element = waitForElement(locator, waitStrategy);
+        LogUtils.step("Click on element: " + locator);
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element);
+
     }
 
     protected void sendKeys(By locator, String text) {
@@ -76,7 +86,16 @@ public abstract class BasePage {
         return getDriver().findElements(locator);
     }
 
-    protected String getTitle() {
+    protected List<WebElement> waitForElements(By locator, WaitStrategy waitStrategy) {
+        WebDriverWait wait = new WebDriverWait(getDriver(),
+                Duration.ofSeconds(TimeoutConstants.EXPLICIT_WAIT));
+        return switch (waitStrategy) {
+            case PRESENT -> wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+            default -> getDriver().findElements(locator);
+        };
+    }
+
+    public String getTitle() {
         return getDriver().getTitle();
     }
 }

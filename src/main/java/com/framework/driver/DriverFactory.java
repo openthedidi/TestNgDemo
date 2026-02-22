@@ -49,6 +49,9 @@ public final class DriverFactory {
         }
         options.addArguments("--disable-notifications");
         options.addArguments("--remote-allow-origins=*");
+        // 以無痕模式啟動
+        options.addArguments("--incognito");
+        options.addArguments("--disable-features=PasswordLeakDetection,PasswordManagerOnboarding");
         return new ChromeDriver(options);
     }
 

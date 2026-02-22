@@ -8,21 +8,18 @@ public class ShoppingPage extends EshopCommonPage {
 
     private final By CART_DETAIL_BUTTON = By.xpath("//button[@routerlink='/dashboard/cart']");
 
-    private final By SUCCESS_MESSAGE_DIV = By.xpath("//div[@aria-label='Product Added To Cart']");
-
-    private final By LOGOUT_BUTTON=By.xpath("//button[@class='btn btn-custom' and text()=' Sign Out ']");
+    private final By SHOP_PAGE_TITLE = By.xpath("//h3[text()='Automation']");
 
 
     /**
      * 登入成功到ShoppingPage的證據
-     * @return CART_DETAIL_BUTTON的text
+     *
+     * @return SHOP_PAGE_TITLE的text
      */
-    public String getLoginSucessString(){
-        return getText(SUCCESS_MESSAGE_DIV);
+    public String getLoginSucessString() {
+        return getText(SHOP_PAGE_TITLE);
 
     }
-
-
 
 
 }

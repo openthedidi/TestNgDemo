@@ -11,7 +11,7 @@ public class LoginPage extends EshopCommonPage{
     private final By EMAIL_FORMAT_CHECK_MESSAGE_DIV= By.xpath("//div[text()='*Enter Valid Email']");
     private final By EMAIL_REQUIRED_CHECK_MESSAGE_DIV= By.xpath("//div[text()='*Email is required']");
     private final By PASSWORD_REQUIRED_CHECK_MESSAGE_DIV= By.xpath("//div[text()='*Password is required']");
-
+    private final By LOGIN_H1 = By.className("login-title");
 
 
     public LoginPage enterUserEmail(String userEmail) {
@@ -55,5 +55,12 @@ public class LoginPage extends EshopCommonPage{
      */
     public String getEmailFormatMessage(){
         return getText(EMAIL_FORMAT_CHECK_MESSAGE_DIV);
+    }
+
+    /**
+     * 回傳登入頁面標題
+     */
+    public String getLoginTitle(){
+        return getText(LOGIN_H1);
     }
 }

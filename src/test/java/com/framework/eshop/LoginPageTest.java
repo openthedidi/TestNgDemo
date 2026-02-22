@@ -13,22 +13,17 @@ public class LoginPageTest extends BaseTest {
         return BrowserType.CHROME;
     }
 
-    @Override
-    protected boolean isHeadless() {
-        return true;
-    }
-
 
     /**
      * 先測試happyPath 的login End2End
      */
-    @Test(enabled = false)
+    @Test(groups = {"smoke", "regression", "end2End"})
     public void validateHappyPathLogin() {
 
         getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
         LoginPage loginPage = new LoginPage();
         ShoppingPage shoppingPag = loginPage.login("neux@gmail.com", "1q@W3e$R5t");
-        assert shoppingPag.getLoginSucessString().contains("Success");
+        assert shoppingPag.getLoginSucessString().contains("AUTOMATION");
 
     }
 
@@ -36,7 +31,7 @@ public class LoginPageTest extends BaseTest {
     /**
      * 測試email input驗證
      */
-    @Test
+    @Test(groups = {"smoke", "validation"})
     public void validateEmailInput() {
         getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
         LoginPage loginPage = new LoginPage();
@@ -49,13 +44,25 @@ public class LoginPageTest extends BaseTest {
     /**
      * 測試email及password 必填驗證
      */
-    @Test
+    @Test(groups = {"smoke", "validation"})
     public void validatePasswordInput() {
         getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
         LoginPage loginPage = new LoginPage();
         loginPage.clickLogin();
         assert loginPage.getEmailRequiredMessage().contains("Email is required");
         assert loginPage.getPasswordRequiredMessage().contains("Password is required");
+    }
+
+    /**
+     * 登出測試
+     */
+    @Test(groups = {"smoke", "regression", "end2End"})
+    public void validateLogout() {
+        getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
+        LoginPage loginPage = new LoginPage();
+        ShoppingPage shoppingPage = loginPage.login("neux@gmail.com", "1q@W3e$R5t");
+        LoginPage returnLoginPage = shoppingPage.logout();
+        assert returnLoginPage.getLoginTitle().contains("Log in");
     }
 
 }
