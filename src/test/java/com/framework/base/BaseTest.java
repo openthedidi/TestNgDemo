@@ -20,7 +20,7 @@ import org.testng.annotations.Parameters;
 public abstract class BaseTest {
 
     @Parameters({"browser", "headless"})
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp(@Optional BrowserType browser, @Optional("false") boolean headless) {
         LogUtils.info("Setting up WebDriver for thread: " + Thread.currentThread().getId());
 
