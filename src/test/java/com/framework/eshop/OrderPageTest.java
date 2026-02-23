@@ -1,7 +1,11 @@
 package com.framework.eshop;
 
 import com.framework.base.BaseTest;
+import com.framework.constants.FrameworkConstants;
 import com.framework.pages.eshop.*;
+import com.framework.utils.DatabaseUtils;
+import com.framework.utils.ExcelDataUtils;
+import com.framework.utils.JsonDataUtils;
 import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -70,4 +74,74 @@ public class OrderPageTest extends BaseTest {
     }
 
 
+
+    @Test(groups = {"smoke", "regression", "end2End"}, dataProvider = "orderDataByJson")
+    public void validateOrderProductByJson(HashMap<String, String> data) {
+        getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
+        LoginPage loginPage = new LoginPage();
+        ShoppingPage shoppingPage = loginPage.login("neux@gmail.com", "1q@W3e$R5t");
+        shoppingPage.addCoatToCart();
+        CartPage cartPage = shoppingPage.goToCart();
+        OrderPage orderPage = cartPage.checkout();
+        orderPage.inputCountry(data.get("country"));
+        orderPage.inputCreditCardNumber(data.get("creditCardNumber"));
+        orderPage.inputCVV(data.get("cvv"));
+        orderPage.inputMail(data.get("mail"));
+        orderPage.inputNameOnCard(data.get("nameOnCard"));
+        OrderSuccessPage orderSuccessPage = orderPage.placeOrder();
+        AssertJUnit.assertEquals("THANKYOU FOR THE ORDER.", orderSuccessPage.getSuccessAddCartString());
+    }
+
+    @Test(groups = {"regression", "end2End"}, dataProvider = "orderDataByExcel")
+    public void validateOrderProductByExcel(HashMap<String, String> data) {
+        getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
+        LoginPage loginPage = new LoginPage();
+        ShoppingPage shoppingPage = loginPage.login("neux@gmail.com", "1q@W3e$R5t");
+        shoppingPage.addCoatToCart();
+        CartPage cartPage = shoppingPage.goToCart();
+        OrderPage orderPage = cartPage.checkout();
+        orderPage.inputCountry(data.get("country"));
+        orderPage.inputCreditCardNumber(data.get("creditCardNumber"));
+        orderPage.inputCVV(data.get("cvv"));
+        orderPage.inputMail(data.get("mail"));
+        orderPage.inputNameOnCard(data.get("nameOnCard"));
+        OrderSuccessPage orderSuccessPage = orderPage.placeOrder();
+        AssertJUnit.assertEquals("THANKYOU FOR THE ORDER.", orderSuccessPage.getSuccessAddCartString());
+    }
+
+    @Test(groups = {"regression", "end2End"}, dataProvider = "orderDataByMySql")
+    public void validateOrderProductByMySql(HashMap<String, String> data) {
+        getDriver().get("https://rahulshettyacademy.com/client/#/auth/login");
+        LoginPage loginPage = new LoginPage();
+        ShoppingPage shoppingPage = loginPage.login("neux@gmail.com", "1q@W3e$R5t");
+        shoppingPage.addCoatToCart();
+        CartPage cartPage = shoppingPage.goToCart();
+        OrderPage orderPage = cartPage.checkout();
+        orderPage.inputCountry("India");
+        orderPage.inputCreditCardNumber(data.get("creditCardNumber"));
+        orderPage.inputCVV(data.get("cvv"));
+        orderPage.inputMail(data.get("mail"));
+        orderPage.inputNameOnCard("TomTest");
+        OrderSuccessPage orderSuccessPage = orderPage.placeOrder();
+        AssertJUnit.assertEquals("THANKYOU FOR THE ORDER.", orderSuccessPage.getSuccessAddCartString());
+    }
+
+
+    @DataProvider(name = "orderDataByMySql")
+    public Object[][] orderDataByMySql() {
+        return DatabaseUtils.getTestData(
+                "SELECT CreditcardNo as creditCardNumber, CreditcardSecurityNo as cvv, MemEmail as mail FROM mem");
+    }
+
+    @DataProvider(name = "orderDataByExcel")
+    public Object[][] orderDataByExcel() {
+        return ExcelDataUtils.getTestData(
+                FrameworkConstants.TESTDATA_DIR + "eshop/orderData.xlsx", "OrderData");
+    }
+
+    @DataProvider(name = "orderDataByJson")
+    public Object[][] orderDataByJson() {
+        return JsonDataUtils.getTestData(
+                FrameworkConstants.TESTDATA_DIR + "eshop/orderData.json");
+    }
 }

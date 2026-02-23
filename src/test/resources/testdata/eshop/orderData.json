@@ -1,0 +1,16 @@
+[
+  {
+    "country": "India",
+    "creditCardNumber": "4111111111111100",
+    "cvv": "666",
+    "nameOnCard": "Tom",
+    "mail": "Tom@gmail.com"
+  },
+  {
+    "country": "Japan",
+    "creditCardNumber": "2111111111111111",
+    "cvv": "550",
+    "nameOnCard": "Tom2",
+    "mail": "Tom2@gmail.com"
+  }
+]

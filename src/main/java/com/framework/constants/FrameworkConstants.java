@@ -23,6 +23,10 @@ public final class FrameworkConstants {
     public static final String HEADLESS_KEY = "headless";
     public static final String BASE_URL_KEY = "base.url";
 
+    // Test data paths
+    public static final String TESTDATA_DIR = "src/test/resources/testdata/";
+    public static final String DB_PROPERTIES_PATH = "src/main/resources/config/db.properties";
+
     // Defaults
     public static final String DEFAULT_BROWSER = "CHROME";
     public static final String DEFAULT_ENVIRONMENT = "DEV";
