@@ -1,0 +1,195 @@
+/*
+ * ============================================================
+ *  Jenkins Declarative Pipeline — Selenium + TestNG 自動化測試
+ * ============================================================
+ *
+ *  EC2 Amazon Linux 2023 前置需求：
+ *    1. Java 17 (Amazon Corretto)
+ *       sudo yum install -y java-17-amazon-corretto-devel
+ *
+ *    2. Maven 3.9+
+ *       sudo yum install -y maven
+ *       （或手動安裝並在 Jenkins Global Tool Configuration 設定）
+ *
+ *    3. Google Chrome
+ *       sudo dnf install -y \
+ *         https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+ *
+ *    4. Microsoft Edge
+ *       sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+ *       sudo dnf config-manager --add-repo \
+ *         https://packages.microsoft.com/yumrepos/edge
+ *       sudo dnf install -y microsoft-edge-stable
+ *
+ *    5. Mozilla Firefox
+ *       sudo dnf install -y firefox
+ *
+ *    6. Browser Drivers — 由 WebDriverManager 自動下載，無需手動安裝
+ *       （ChromeDriver / msedgedriver / geckodriver 皆自動處理）
+ *
+ *    7. Jenkins Plugins:
+ *       - Pipeline
+ *       - HTML Publisher (publishHTML)
+ *       - JUnit (junit step)
+ * ============================================================
+ */
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven-3.9'   // 對應 Jenkins Global Tool Configuration 中的 Maven 名稱
+        jdk   'JDK-17'      // 對應 Jenkins Global Tool Configuration 中的 JDK 名稱
+    }
+
+    parameters {
+        choice(
+            name: 'BROWSER',
+            choices: ['CHROME', 'EDGE', 'FIREFOX'],
+            description: '選擇測試瀏覽器'
+        )
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['DEV', 'SIT', 'PROD'],
+            description: '選擇測試環境'
+        )
+        choice(
+            name: 'SUITE_XML',
+            choices: [
+                'testng-smoke.xml',
+                'testng-framework.xml',
+                'testng-cross-browser.xml',
+                'testng-by-group.xml',
+                'testng-by-package.xml',
+                'testng-by-parallel.xml',
+                'testng-by-parameter.xml',
+                'testng-class-method.xml',
+                'testng-in-listeners.xml'
+            ],
+            description: '選擇 TestNG Suite XML'
+        )
+        booleanParam(
+            name: 'HEADLESS',
+            defaultValue: true,
+            description: '是否以 Headless 模式執行瀏覽器'
+        )
+    }
+
+    environment {
+        // Chrome headless 在 Linux 環境所需的設定
+        DISPLAY       = ':99'
+        CHROME_BIN    = '/usr/bin/google-chrome'
+        MAVEN_OPTS    = '-Xmx1024m'
+    }
+
+    options {
+        timestamps()                    // Console 加上時間戳
+        timeout(time: 30, unit: 'MINUTES')  // 整個 Pipeline 最長 30 分鐘
+        buildDiscarder(logRotator(
+            numToKeepStr: '20',         // 保留最近 20 筆 Build
+            artifactNumToKeepStr: '10'  // 保留最近 10 筆產出物
+        ))
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "=== Stage: Checkout ==="
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "=== Stage: Build (Compile) ==="
+                sh 'mvn clean compile -B -q'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "=== Stage: Test ==="
+                echo "Browser: ${params.BROWSER}"
+                echo "Environment: ${params.ENVIRONMENT}"
+                echo "Suite XML: ${params.SUITE_XML}"
+                echo "Headless: ${params.HEADLESS}"
+                sh """
+                    mvn test -B \
+                        -Dsuite.xml=${params.SUITE_XML} \
+                        -Dbrowser=${params.BROWSER} \
+                        -Dheadless=${params.HEADLESS} \
+                        -Denvironment=${params.ENVIRONMENT}
+                """
+            }
+        }
+
+        stage('Report') {
+            steps {
+                echo "=== Stage: Report ==="
+                echo 'TestNG XML 報告與 ExtentReport HTML 將在 post 區塊歸檔'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '=== Post: 歸檔測試報告 ==='
+
+            // TestNG / Surefire XML → Jenkins JUnit 報告
+            junit(
+                testResults: 'target/surefire-reports/*.xml',
+                allowEmptyResults: true
+            )
+
+            // ExtentReport HTML → Jenkins HTML Publisher
+            publishHTML(target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : 'reports/extent-reports',
+                reportFiles          : '*.html',
+                reportName           : 'Extent Test Report'
+            ])
+
+            // 歸檔失敗截圖
+            archiveArtifacts(
+                artifacts: 'reports/screenshots/failed/**/*.png',
+                allowEmptyArchive: true,
+                fingerprint: false
+            )
+
+            // 歸檔 TestNG XML 報告
+            archiveArtifacts(
+                artifacts: 'target/surefire-reports/**/*.xml',
+                allowEmptyArchive: true,
+                fingerprint: false
+            )
+
+            // 清理 workspace（可選，視磁碟空間決定是否啟用）
+            // cleanWs()
+        }
+
+        success {
+            echo "Pipeline 執行成功！Build #${env.BUILD_NUMBER}"
+        }
+
+        failure {
+            echo "Pipeline 執行失敗！Build #${env.BUILD_NUMBER}"
+            // TODO: 擴展 Email 通知
+            // mail to: 'team@example.com',
+            //      subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            //      body: "Build URL: ${env.BUILD_URL}"
+
+            // TODO: 擴展 Slack 通知
+            // slackSend(
+            //     channel: '#qa-alerts',
+            //     color: 'danger',
+            //     message: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+            // )
+        }
+
+        unstable {
+            echo "Pipeline 執行不穩定（部分測試失敗）！Build #${env.BUILD_NUMBER}"
+        }
+    }
+}
