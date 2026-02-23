@@ -4,12 +4,14 @@
  * ============================================================
  *
  *  EC2 Amazon Linux 2023 前置需求：
+ *    0. Git
+ *       sudo yum install -y git
+ *
  *    1. Java 17 (Amazon Corretto)
  *       sudo yum install -y java-17-amazon-corretto-devel
  *
- *    2. Maven 3.9+
+ *    2. Maven 3.8.4 (Red Hat)
  *       sudo yum install -y maven
- *       （或手動安裝並在 Jenkins Global Tool Configuration 設定）
  *
  *    3. Google Chrome
  *       sudo dnf install -y \
@@ -27,20 +29,16 @@
  *    6. Browser Drivers — 由 WebDriverManager 自動下載，無需手動安裝
  *       （ChromeDriver / msedgedriver / geckodriver 皆自動處理）
  *
- *    7. Jenkins Plugins:
- *       - Pipeline
- *       - HTML Publisher (publishHTML)
- *       - JUnit (junit step)
+ *    7. Jenkins Plugins（Manage Jenkins → Manage Plugins → Available plugins）:
+ *       - Pipeline                     （通常預設已安裝）
+ *       - HTML Publisher               （publishHTML step，用於歸檔 ExtentReport）
+ *       - JUnit                        （junit step，用於解析 Surefire XML 報告）
  * ============================================================
  */
 
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven-3.9'   // 對應 Jenkins Global Tool Configuration 中的 Maven 名稱
-        jdk   'JDK-17'      // 對應 Jenkins Global Tool Configuration 中的 JDK 名稱
-    }
 
     parameters {
         choice(
@@ -95,7 +93,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "=== Stage: Checkout ==="
-                checkout scm
+                git branch: 'main',
+                    url: 'https://github.com/openthedidi/TestNgDemo.git'
             }
         }
 
