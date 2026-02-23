@@ -10,6 +10,8 @@ public class CartPage extends EshopCommonPage {
 
     private final By PRODUCT_NAMES_IN_CART = By.xpath("//div[@class='cart']//h3");
 
+    private final By CHECKOUT_BUTTON = By.xpath("//button[normalize-space()='Checkout']");
+
     public boolean isProductInCart(String productName) {
         return findElements(PRODUCT_NAMES_IN_CART).stream()
                 .anyMatch(element -> element.getText().equalsIgnoreCase(productName));
@@ -22,4 +24,8 @@ public class CartPage extends EshopCommonPage {
     }
 
 
+    public OrderPage checkout() {
+        click(CHECKOUT_BUTTON);
+        return new OrderPage();
+    }
 }
