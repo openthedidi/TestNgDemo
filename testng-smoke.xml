@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Smoke Suite" parallel="tests" thread-count="2">
+<suite name="Smoke Suite" parallel="tests" thread-count="3">
 
     <listeners>
         <listener class-name="com.framework.listeners.ExtentReportListener"/>
@@ -15,8 +15,9 @@
             </run>
         </groups>
         <classes>
-            <class name="com.framework.eshop.LoginPageTest">
-            </class>
+            <class name="com.framework.eshop.LoginPageTest"/>
+            <class name="com.framework.eshop.OrderPageTest"/>
+            <class name="com.framework.eshop.ShoppingPageTest"/>
         </classes>
     </test>
 

@@ -13,6 +13,7 @@ import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import com.framework.config.EnvironmentConfig;
 
 import java.io.File;
 
@@ -24,6 +25,7 @@ public class ExtentReportListener implements ISuiteListener, ITestListener {
 
     private static ExtentReports extentReports;
     private static final ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+
 
     /**
      * ExtentReports 初始化：檔案路徑，browser預設先用chrome
@@ -42,10 +44,16 @@ public class ExtentReportListener implements ISuiteListener, ITestListener {
 
         extentReports = new ExtentReports();
         extentReports.attachReporter(sparkReporter);
+
         extentReports.setSystemInfo("Environment",
-                System.getProperty("environment", "dev"));
+                System.getProperty("environment", EnvironmentConfig.getEnvironmentType().toString()));
         extentReports.setSystemInfo("Browser",
-                System.getProperty("browser", "chrome"));
+                System.getProperty("browser", EnvironmentConfig.getBrowserType().toString()));
+        extentReports.setSystemInfo("Headless",
+                System.getProperty("headless", String.valueOf(EnvironmentConfig.isHeadless())));
+        extentReports.setSystemInfo("OS", System.getProperty("os.name"));
+        extentReports.setSystemInfo("Java Version", System.getProperty("java.version"));
+        extentReports.setSystemInfo("Tester", "Chen-CY");
 
         LogUtils.info("ExtentReports initialized: " + reportPath);
     }
