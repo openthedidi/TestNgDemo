@@ -38,6 +38,9 @@ bin/
 logs/
 *.log
 
+# properties
+db.properties
+
 # Test outputs
 test-output/
 screenshots/
