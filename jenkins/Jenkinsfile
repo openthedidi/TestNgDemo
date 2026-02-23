@@ -41,6 +41,11 @@ pipeline {
 
 
     parameters {
+        string(
+            name: 'BRANCH',
+            defaultValue: 'main',
+            description: '選擇 Git 分支（例如 main、develop、feature/xxx）'
+        )
         choice(
             name: 'BROWSER',
             choices: ['CHROME', 'EDGE', 'FIREFOX'],
@@ -93,7 +98,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "=== Stage: Checkout ==="
-                git branch: 'main',
+                git branch: "${params.BRANCH}",
                     url: 'https://github.com/openthedidi/TestNgDemo.git'
             }
         }
