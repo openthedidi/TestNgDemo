@@ -114,6 +114,7 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>${suite.xml}</suiteXmlFile>
                     </suiteXmlFiles>
+                    <!--   maven 指令的參數區    -->
                     <systemPropertyVariables>
                         <browser>${browser}</browser>
                         <environment>${environment}</environment>

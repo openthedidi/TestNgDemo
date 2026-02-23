@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * Singleton ConfigManager.
- * Priority: System Property > env.properties > config.properties
+ * Priority: System Property(來自maven參數) > env.properties > config.properties
  */
 public final class ConfigManager {
 
