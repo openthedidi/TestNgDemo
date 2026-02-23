@@ -150,6 +150,13 @@ pipeline {
                 reportName           : 'Extent Test Report'
             ])
 
+            // 歸檔 ExtentReport HTML
+            archiveArtifacts(
+                artifacts: 'reports/extent-reports/*.html',
+                allowEmptyArchive: true,
+                fingerprint: false
+            )
+
             // 歸檔失敗截圖
             archiveArtifacts(
                 artifacts: 'reports/screenshots/failed/**/*.png',
