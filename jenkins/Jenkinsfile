@@ -67,7 +67,8 @@ pipeline {
                 'testng-by-parallel.xml',
                 'testng-by-parameter.xml',
                 'testng-class-method.xml',
-                'testng-in-listeners.xml'
+                'testng-in-listeners.xml',
+                'testng-db.xml'
             ],
             description: '選擇 TestNG Suite XML'
         )
