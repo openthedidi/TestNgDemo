@@ -13,7 +13,7 @@ public class SkBankCommonPage extends BasePage {
 
 
     public SkBankSitemapPage goToSitemapPage(){
-        click(SITE_MAP_BTN, WaitStrategy.PRESENT);
+        click(SITE_MAP_BTN, WaitStrategy.CLICKABLE);
         return new SkBankSitemapPage();
     }
 

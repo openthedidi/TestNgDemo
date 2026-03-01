@@ -5,6 +5,8 @@ import com.framework.driver.DriverManager;
 import com.framework.enums.WaitStrategy;
 import com.framework.utils.LogUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -42,16 +44,23 @@ public abstract class BasePage {
         try {
             element.click();
         }catch (ElementNotInteractableException e){
-            clickByJs(locator, waitStrategy);
+            clickByAction(locator, waitStrategy);
         }
 
     }
 
     protected void clickByJs(By locator, WaitStrategy waitStrategy){
         WebElement element = waitForElement(locator, waitStrategy);
-        LogUtils.step("Click on element: " + locator);
+        LogUtils.step("Click on element by Js: " + locator);
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element);
 
+    }
+
+    protected void clickByAction(By locator, WaitStrategy waitStrategy){
+        WebElement element = waitForElement(locator, waitStrategy);
+        LogUtils.step("Click on element by Actions: " + locator);
+        Actions a = new Actions(getDriver());
+        a.click(element).perform();
     }
 
     protected void sendKeys(By locator, String text) {
